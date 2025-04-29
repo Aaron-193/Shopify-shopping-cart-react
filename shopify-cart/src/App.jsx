@@ -1,7 +1,9 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // ✅ Import Router
 import { useEffect } from "react";
+import ShoppingCart from "./components/ShoppingCart";
+import Checkout from "./components/Checkout"; // ✅ Make sure this exists
 import CartItem from "./components/CartItem";
 import { useCart } from "./context/cartContext";
-import ShoppingCart from "./components/ShoppingCart";
 import { getItemFromStorage, getParsedItemFromStorage } from "./utilities/localStorageFns";
 
 const App = () => {
@@ -9,31 +11,32 @@ const App = () => {
 
   useEffect(() => {
     setItems();
-
-    if(getParsedItemFromStorage("cartItems")?.length !== 0 &&getItemFromStorage("cartItems") !== null) {
-      setCartItemsFromStorage()
+    if (getParsedItemFromStorage("cartItems")?.length !== 0 && getItemFromStorage("cartItems") !== null) {
+      setCartItemsFromStorage();
     }
   }, []);
 
   useEffect(() => {
     console.log(allItems);
   }, [allItems]);
+
   return (
-    <>
-    
-    <div className="grid place-items-center py-20">
-      <h1 className="lg:text-5xl md:text-4xl text-3xl italic text-emerald-600 mb-16 px-10 text-center">
-      Your Cart, Your Swag: Shop with Ease Today!
-      </h1>
-      <ShoppingCart />
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 place-items-start gap-10 xl:px-6 px-10">
-        {allItems?.map((item) => {
-          return <CartItem key={item.id} item={item} />
-        })}
-      </div>
-    </div>
-  
-  </>
+    <Router> {/* ✅ Wrap everything inside Router */}
+      <Routes>
+        <Route path="/" element={ 
+          <div className="grid place-items-center py-20">
+            <h1 className="lg:text-5xl md:text-4xl text-3xl italic text-emerald-600 mb-16 px-10 text-center">
+              Your Cart, Your Swag: Shop with Ease Today!
+            </h1>
+            <ShoppingCart />
+            <div className="grid xl:grid-cols-3 lg:grid-cols-2 place-items-start gap-10 xl:px-6 px-10">
+              {allItems?.map((item) => <CartItem key={item.id} item={item} />)}
+            </div>
+          </div>
+        } />
+        <Route path="/checkout" element={<Checkout />} /> {/* ✅ Add checkout route */}
+      </Routes>
+    </Router>
   );
 };
 
