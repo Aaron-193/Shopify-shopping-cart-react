@@ -19,7 +19,7 @@ const Checkout = () => {
       return;
     }
 
-    toast.success(`Thank you for your purchase, ${formData.name}!`);
+    toast.success(`Thank you for your purchase, ${formData.name}!Transaction in progress.`)
 
     
     setTimeout(() => navigate("/"),10000)
